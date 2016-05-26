@@ -83,7 +83,7 @@
  "meta": {
   "app": "http://www.aseprite.org/",
   "version": "1.1.5.2",
-  "image": "/Users/jack/Desktop/Classes/CS 413/Projects/cs413-P3/assets.png",
+  "image": "assets.png",
   "format": "RGBA8888",
   "size": { "w": 320, "h": 32 },
   "scale": "1",
