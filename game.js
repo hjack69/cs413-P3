@@ -12,6 +12,7 @@ const RIGHT_BTNS = [39, 68];
 const LEFT_BTNS = [37, 65];
 const UP_BTNS = [38, 87];
 const DOWN_BTNS = [40, 83];
+const MUTE_BTN = 77;
 
 function randint(min, max) {
     return Math.floor(Math.random() * max) + min;
@@ -113,12 +114,17 @@ var map;
 var hero;
 var key;
 var walls;
+var bgAudio;
+var foundAudio;
+var muted = false;
 var tu = new TileUtilities(PIXI);
 
 PIXI.loader
     .add('map_json', 'map.json')
     .add('tiles', 'tiles.png')
     .add('assets.json')
+    .add('mapFound.mp3')
+    .add('background.mp3')
     .load(ready);
 
 function ready() {
@@ -153,6 +159,11 @@ function ready() {
 
     hero = new Hero(gameScreen);
     key = new Key(gameScreen);
+
+    bgAudio = PIXI.audioManager.getAudio("background.mp3");
+    bgAudio.loop = true;
+    bgAudio.play();
+    foundAudio = PIXI.audioManager.getAudio("mapFound.mp3");
 
     toScreen("menu");
 }
@@ -303,6 +314,15 @@ function keydown(e) {
     else if (LEFT_BTNS.indexOf(e.keyCode) > -1) direction["left"] = true;
     else if (UP_BTNS.indexOf(e.keyCode) > -1) direction["up"] = true;
     else if (DOWN_BTNS.indexOf(e.keyCode) > -1) direction["down"] = true;
+    else if (e.keyCode == MUTE_BTN) {
+        muted = !muted;
+        if (muted) {
+            bgAudio.stop();
+        }
+        else {
+            bgAudio.play();
+        }
+    }
 }
 
 function keyup(e) {
@@ -328,6 +348,9 @@ function animate() {
     if (gameScreen.visible) {
         updateCamera();
         if (hero.container.x == key.container.x && hero.container.y == key.container.y) {
+            if (!muted) {
+                foundAudio.play();
+            }
             mapFoundScreen.position.set(0, -HEIGHT);
             toScreen("found");
             createjs.Tween.get(mapFoundScreen).to({x: 0, y: 0}, 500, createjs.Ease.bounceIn());
