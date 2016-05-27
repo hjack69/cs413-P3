@@ -15,7 +15,7 @@ const DOWN_BTNS = [40, 83];
 const MUTE_BTN = 77;
 
 function randint(min, max) {
-    return Math.floor(Math.random() * max) + min;
+    return Math.floor(Math.random() * (max-min)) + min;
 }
 
 PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
